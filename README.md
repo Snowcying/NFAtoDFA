@@ -1,1 +1,1 @@
-# DFAtoDFA
+# NFAtoDFA
