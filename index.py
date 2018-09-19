@@ -179,15 +179,15 @@ def draw(ans):
   for x in ans:
     index = ans.index(x)
     if not notExist(end,x):
-        dot.node(indexLabel(index),indexLabel(index),color='red')
-      else:
-        dot.node(indexLabel(index),indexLabel(index))
-      for road in roads:
-        nextNode = closureMove(x,road)
-        if nextNode != []:
-          print(x,nextNode,road)
-          nextNodeIndex = ans.index(nextNode)
-          dot.edge(indexLabel(index),indexLabel(nextNodeIndex),road)
+      dot.node(indexLabel(index),indexLabel(index),color='red')
+    else:
+      dot.node(indexLabel(index),indexLabel(index))
+    for road in roads:
+      nextNode = closureMove(x,road)
+      if nextNode != []:
+        print(x,nextNode,road)
+        nextNodeIndex = ans.index(nextNode)
+        dot.edge(indexLabel(index),indexLabel(nextNodeIndex),road)
   dot.edge('start',indexLabel(0),'start')
   dot.view()
       
