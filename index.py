@@ -1,6 +1,10 @@
 import re
 import sys
 import operator
+from graphviz import Digraph
+
+dot = Digraph(comment='NFAtoDFA', format="png")
+
 # import networkx
 # import matplotlib.pyplot as plt
 
@@ -8,20 +12,20 @@ import operator
 
 
 def createDFAgraph():
-  # return {'0':{'null':['1','7'],'a':[],'b':[]},
-  #         '1':{'null':['2','4'],'a':[],'b':[]},
-  #         '2':{'null':[],'a':['3'],'b':[]},
-  #         '3':{'null':['6'],'a':[],'b':[]},
-  #         '4':{'null':[],'a':[],'b':['5']},
-  #         '5':{'null':['6'],'a':[],'b':[]},
-  #         '6':{'null':['1','7'],'a':[],'b':[]},
-  #         '7':{'null':[],'a':['8'],'b':[]},
-  #         '8':{'null':[],'a':[],'b':['9']},
-  #         '9':{'null':[],'a':[],'b':['10']},
-  #         '10':{'null':[],'a':[],'b':[]}
-  # }
-  return {'S': {'null':[],'0':['V','Q'],'1':['Q','U']}, 'Q': {'null':[],'0':['V'],'1':['Q','U']}, 'V': {'null':[],'0':['Z'],'1':[]}, 
-  'U': {'null':[],'0':[],'1':['Z']}, 'Z':{'null':[],'0':['Z'],'1':['Z']}}
+  return {'0':{'null':['1','7'],'a':[],'b':[]},
+          '1':{'null':['2','4'],'a':[],'b':[]},
+          '2':{'null':[],'a':['3'],'b':[]},
+          '3':{'null':['6'],'a':[],'b':[]},
+          '4':{'null':[],'a':[],'b':['5']},
+          '5':{'null':['6'],'a':[],'b':[]},
+          '6':{'null':['1','7'],'a':[],'b':[]},
+          '7':{'null':[],'a':['8'],'b':[]},
+          '8':{'null':[],'a':[],'b':['9']},
+          '9':{'null':[],'a':[],'b':['10']},
+          '10':{'null':[],'a':[],'b':[]}
+  }
+  # return {'S': {'null':[],'0':['V','Q'],'1':['Q','U']}, 'Q': {'null':[],'0':['V'],'1':['Q','U']}, 'V': {'null':[],'0':['Z'],'1':[]}, 
+  # 'U': {'null':[],'0':[],'1':['Z']}, 'Z':{'null':[],'0':['Z'],'1':['Z']}}
 
 graph = createDFAgraph()
 
@@ -33,9 +37,12 @@ def getRoads():
     ans.remove('null')
     return strsort(ans)
 
-
+def getStartEnd():
+  keys = []
+  for x in graph:
+    keys.append(x)
+  return [keys[0],keys[-1]]
   
-
 
 def DFAgraphNode(start = 'S', value = '0'):
   # graph = createDFAgraph()
@@ -166,7 +173,40 @@ def getFirstNode():
   for node in graph:
     return node
 
+def indexLabel(index):
+  startEnd = getStartEnd()
+  start = startEnd[0]
+  if start.isdigit():
+    numList = list(map(chr, range(ord('0'), ord('9') + 1)))
+    return numList[index]
+  elif start.isalpha():
+    letterList = list(map(chr, range(ord('A'), ord('Z') + 1)))
+    return letterList[index]
 
+def draw(ans):
+  roads = getRoads()
+  startEnd = getStartEnd()
+  # start = startEnd[0]
+  end = startEnd[1]
+  dot.node('start','start')
+  for x in ans:
+    index = ans.index(x)
+    if index == -1:
+      dot.node('start','start')
+    else:
+      if not notExist(end,x):
+        dot.node(indexLabel(index),indexLabel(index),color='red')
+      else:
+        dot.node(indexLabel(index),indexLabel(index))
+      for road in roads:
+        nextNode = closureMove(x,road)
+        if nextNode != []:
+          print(x,nextNode,road)
+          nextNodeIndex = ans.index(nextNode)
+          dot.edge(indexLabel(index),indexLabel(nextNodeIndex),road)
+  dot.edge('start',indexLabel(0),'start')
+  dot.view()
+      
 
 if __name__ == '__main__':
 
@@ -174,3 +214,4 @@ if __name__ == '__main__':
   ans = []
   BFS(t0,ans)
   print(ans)
+  draw(ans)
