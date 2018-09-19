@@ -42,11 +42,6 @@ def getStartEnd():
   for x in graph:
     keys.append(x)
   return [keys[0],keys[-1]]
-  
-
-def DFAgraphNode(start = 'S', value = '0'):
-  # graph = createDFAgraph()
-  return graph[start][value]
 
 def closure(list):
   ans = []
@@ -90,7 +85,6 @@ def getTerm(x,road,ans):
     nodes = graph[x][road]
     for node in nodes:
       appendNoRepeat(node,ans)
-
     return
   elif graph[x]['null'] != []:
     terms = []
@@ -106,7 +100,6 @@ def appendNoRepeat(x,ans):
   if notExist(x,ans):
     ans.append(x)
     strsort(ans)
-
 
 def sort_key(s):
     if s:
@@ -126,12 +119,6 @@ def strsort(alist):
     return alist
   else:
     return sorted(alist)
-
-
-def NFA(start):
-  ans = []
-  T0 = closure(start)
-  ans.append(T0)
 
 def cmpList(x,lists):
   flag = False
@@ -191,10 +178,7 @@ def draw(ans):
   dot.node('start','start')
   for x in ans:
     index = ans.index(x)
-    if index == -1:
-      dot.node('start','start')
-    else:
-      if not notExist(end,x):
+    if not notExist(end,x):
         dot.node(indexLabel(index),indexLabel(index),color='red')
       else:
         dot.node(indexLabel(index),indexLabel(index))
