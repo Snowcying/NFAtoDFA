@@ -2,6 +2,7 @@ import re
 import sys
 import operator
 from graphviz import Digraph
+import construct
 
 dot = Digraph(comment='NFAtoDFA', format="png")
 dot2 = Digraph(comment='minDFA', format="png")
@@ -22,7 +23,11 @@ class DFAgraph():
     self.start = start
     self.end = end
 
+temp = construct.expression('abaa')
+gra = construct.calculate(temp)
+
 def createNFAgraph():
+  return gra.dic
   # return {'0':{'null':['1','7'],'a':[],'b':[]},
   #         '1':{'null':['2','4'],'a':[],'b':[]},
   #         '2':{'null':[],'a':['3'],'b':[]},
@@ -42,14 +47,14 @@ def createNFAgraph():
   #         '1':{'null':[],'a':['0'],'b':[]},
   # }
 
-   return {'0':{'null':[],'a':['1'],'b':['2']},
-          '1':{'null':[],'a':['1'],'b':['4']},
-          '2':{'null':[],'a':['1'],'b':['3']},
-          '3':{'null':[],'a':['3'],'b':['2']},
-          '4':{'null':[],'a':['0'],'b':['5']},
-          '5':{'null':[],'a':['5'],'b':['4']},
-  }
-NFA1 = NFAgraph(createNFAgraph(),['0'],['0'])
+  # return {'0':{'null':[],'a':['1'],'b':['2']},
+  #       '1':{'null':[],'a':['1'],'b':['4']},
+  #       '2':{'null':[],'a':['1'],'b':['3']},
+  #       '3':{'null':[],'a':['3'],'b':['2']},
+  #       '4':{'null':[],'a':['0'],'b':['5']},
+  #       '5':{'null':[],'a':['5'],'b':['4']},
+  # }
+NFA1 = NFAgraph(createNFAgraph(),gra.start,gra.end)
 graph = NFA1.NFA
 
 def getRoads(gra):
@@ -363,9 +368,9 @@ if __name__ == '__main__':
   print('DFA',ans)
   draw(ans,NFA1.end)
 
-  DFA1 = DFAgraph()
-  createNewgraph(ans,DFA1)
+  # DFA1 = DFAgraph()
+  # createNewgraph(ans,DFA1)
 
-  min = minDFA(DFA1)
-  print('minDFA: ',min)
-  drawMinDFA(min,DFA1)
+  # min = minDFA(DFA1)
+  # print('minDFA: ',min)
+  # drawMinDFA(min,DFA1)
