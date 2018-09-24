@@ -23,7 +23,7 @@ class DFAgraph():
     self.start = start
     self.end = end
 
-temp = construct.expression('abaa')
+temp = construct.expression('(a|b)abb(a|b)')
 gra = construct.calculate(temp)
 
 def createNFAgraph():
@@ -210,7 +210,7 @@ def newTerm(ends,list):
 
 def draw(ans,end):
   roads = getRoads(graph)
-  dot.node('start','start')
+  # dot.node('start','start')
   for x in ans:
     index = ans.index(x)
     if newTerm(end,x):
@@ -222,7 +222,7 @@ def draw(ans,end):
       if nextNode != []:
         nextNodeIndex = ans.index(nextNode)
         dot.edge(indexLabel(index),indexLabel(nextNodeIndex),road)
-  dot.edge('start',indexLabel(0),'start')
+  dot.edge('',indexLabel(0),'start')
   dot.render('NFAtoDFA.gv', view=True)
 
 def createNewgraph(ans,DFA):
@@ -362,15 +362,15 @@ def drawMinDFA(min,DFA):
 
 if __name__ == '__main__':
 
-  t0 = closure(getFirstNode())
+  t0 = closure(gra.start)
   ans = []
   BFS(t0,ans)
   print('DFA',ans)
   draw(ans,NFA1.end)
 
-  # DFA1 = DFAgraph()
-  # createNewgraph(ans,DFA1)
+  DFA1 = DFAgraph()
+  createNewgraph(ans,DFA1)
 
-  # min = minDFA(DFA1)
-  # print('minDFA: ',min)
-  # drawMinDFA(min,DFA1)
+  min = minDFA(DFA1)
+  print('minDFA: ',min)
+  drawMinDFA(min,DFA1)

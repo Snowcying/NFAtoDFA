@@ -147,54 +147,192 @@ class graph():
 
 indexNum = 0
 
+def initDic():
+  dic = {'null':[]}
+  letterList = list(map(chr, range(ord('a'), ord('b') + 1)))
+  for letter in letterList:
+    dic[letter] = []
+  return dic 
+
 def construct(x,y,op):
   global indexNum
-  print('construct')
+  # print('construct')
   dic = {}
+  g1 = graph()
   if op == '$':
+    # a$a
     if isinstance(x,str) and isinstance(y,str):
-      dic[str(indexNum)] = {'null':[],'a':[],'b':[]}
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[str(indexNum)] = {'null':[],'a':[],'b':[]}
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[str(indexNum)] = {'null':[],'a':[],'b':[]}
+      dic[str(indexNum)] = initDic()
       dic[str(indexNum-2)][x].append(str(indexNum-1))
       dic[str(indexNum-1)][y].append(str(indexNum))
       g1 = graph(dic,[str(indexNum-2)],[str(indexNum)])
       indexNum = indexNum + 1
+    # obj$a
     elif (not isinstance(x,str)) and isinstance(y,str):
       dic = x.dic
       dicEnd = x.end
-      dic[str(indexNum)] = {'null':[],'a':[],'b':[]}
+      dic[str(indexNum)] = initDic()
       for end in dicEnd:
         dic[end][y].append(str(indexNum))
       g1 = graph(dic,x.start,[str(indexNum)])
       indexNum = indexNum + 1
-    # else:
-    #   dicx = x.dic
-    #   dicxEnd = x.end
-    #   dicy = y.dic
-    #   dicyStart = y.start
+    # obj$obj
+    elif (not isinstance(x,str)) and (not isinstance(y,str)):
+      dicx = x.dic
+      dicxEnd = x.end
+      dicy = y.dic
+      dicyStart = y.start
 
-    #   dic = dicx
-    #   for y in dicy:
-    #     dic[y] = dicy[y]
+      dic = dicx
+      for dicxx in dicx:
+        dic[dicxx] = dicx[dicxx]
+      for dicyy in dicy:
+        dic[dicyy] = dicy[dicyy]
       
-    #   for xend in dicxEnd:
-    #     for ystart in ystart:
-    #       dic[xend]
-          
+      for xend in dicxEnd:
+        for ystart in dicyStart:
+          dic[xend]['null'].append(ystart)
+      g1 = graph(dic,x.start,y.end)
+    # a$obj
+    else:
+      dic = y.dic
+      dic[str(indexNum)] = initDic()
+      dicyStart = y.start
+      for ystart in dicyStart:
+        dic[str(indexNum)][x].append(ystart)
+      g1 = graph(dic,[str(indexNum)],y.end)
+      indexNum = indexNum + 1
+  elif op == '*':
+    if isinstance(x,str):
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum-1)]['null'].append(str(indexNum-2))
+      dic[str(indexNum-2)][x].append(str(indexNum-1))
+      g1 = graph(dic,[str(indexNum-2)],[str(indexNum-1)])
+    else:
+      dic = x.dic
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dicStart = x.start[0]
+      dicEnd = x.end[0]
+      dic[dicEnd]['null'].append(dicStart)
+      dic[str(indexNum-2)]['null'].append(dicStart)
+      dic[str(indexNum-2)]['null'].append(str(indexNum-1))
+      dic[dicEnd]['null'].append(str(indexNum-1))
+      g1 = graph(dic,[str(indexNum-2)],[str(indexNum-1)])
+  elif op == '|':
+    # a|a
+    if isinstance(x,str) and isinstance(y,str):
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+
+      dic[str(indexNum-6)]['null'].append(str(indexNum-5))
+      dic[str(indexNum-6)]['null'].append(str(indexNum-3))
+      dic[str(indexNum-5)][x].append(str(indexNum-4))
+      dic[str(indexNum-4)]['null'].append(str(indexNum-1))
+      dic[str(indexNum-3)][y].append(str(indexNum-2))
+      dic[str(indexNum-2)]['null'].append(str(indexNum-1))
+
+      g1 = graph(dic,[str(indexNum-6)],[str(indexNum-1)])
+      
+    # obj|a
+    elif (not isinstance(x,str)) and isinstance(y,str):
+      dic = x.dic
+      dicEnd = x.end[0]
+      dicStart = x.start[0]
+
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+
+      dic[str(indexNum-4)]['null'].append(dicStart)
+      dic[str(indexNum-4)]['null'].append(str(indexNum-3))
+      dic[str(indexNum-3)][y].append(str(indexNum-2))
+      dic[str(indexNum-2)]['null'].append(str(indexNum-1))
+      dic[dicEnd]['null'].append(str(indexNum-1))
+
+      g1 = graph(dic,[str(indexNum-4)],[str(indexNum-1)])
+
+    # obj|obj
+    elif (not isinstance(x,str)) and (not isinstance(y,str)):
+      dicx = x.dic
+      dicxEnd = x.end[0]
+      dicxStart = x.start[0]
+      dicy = y.dic
+      dicyStart = y.start[0]
+      dicyEnd = y.end[0]
+
+      # dic = dicx
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+
+      for dicxx in dicx:
+        dic[dicxx] = dicx[dicxx]
+      for dicyy in dicy:
+        dic[dicyy] = dicy[dicyy]
+      
+      dic[str(indexNum-2)]['null'].append(dicxStart)
+      dic[str(indexNum-2)]['null'].append(dicyStart)
+      dic[dicxEnd]['null'].append(str(indexNum-1))
+      dic[dicyEnd]['null'].append(str(indexNum-1))
+
+      g1 = graph(dic,[str(indexNum-2)],[str(indexNum-1)])
+    # a|obj
+    else:
+      dic = y.dic
+      dicEnd = y.end[0]
+      dicStart = y.start[0]
+
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+
+      dic[str(indexNum-4)]['null'].append(dicStart)
+      dic[str(indexNum-4)]['null'].append(str(indexNum-3))
+      dic[str(indexNum-3)][x].append(str(indexNum-2))
+      dic[str(indexNum-2)]['null'].append(str(indexNum-1))
+      dic[dicEnd]['null'].append(str(indexNum-1))
+
+      g1 = graph(dic,[str(indexNum-4)],[str(indexNum-1)])
 
   print('dic',dic)
+  print('start',g1.start,'end',g1.end)
 
   return g1
 
 if __name__ == '__main__':
-  # express = 'abb*(a|b)abb(a|b)'
-  express = 'aba'
-  # express = 'a+b'
-  # strlist = splitStr(express)
-  # ans = parse(strlist)
+  express = 'abb*(a|b)abb(a|b)'
+  # express = '(a|b)*abb'
   ans = expression(express)
   print(ans)
 
