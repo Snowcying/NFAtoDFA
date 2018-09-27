@@ -25,49 +25,25 @@ class DFAgraph():
 
 
 #######################  在这里输入正规文法
-temp = construct.expression('b((ab)*|bb)*ab')
-# temp = construct.expression('b((ab)*|bb)*ab')
+temp = construct.expression('bD|aQ')
 #######################
 gra = construct.calculate(temp)
 
 def createNFAgraph():
-  return gra.dic
+  # return gra.dic
   # p50 3.6
-  # return {'0':{'null':['1','7'],'a':[],'b':[]},
-  #         '1':{'null':['2','4'],'a':[],'b':[]},
-  #         '2':{'null':[],'a':['3'],'b':[]},
-  #         '3':{'null':['6'],'a':[],'b':[]},
-  #         '4':{'null':[],'a':[],'b':['5']},
-  #         '5':{'null':['6'],'a':[],'b':[]},
-  #         '6':{'null':['1','7'],'a':[],'b':[]},
-  #         '7':{'null':[],'a':['8'],'b':[]},
-  #         '8':{'null':[],'a':[],'b':['9']},
-  #         '9':{'null':[],'a':[],'b':['10']},
-  #         '10':{'null':[],'a':[],'b':[]}
-  # }
-  # return { 0 :{ 'null' :[], 'a' :[1], 'b' :[6]},
-  #          1 :{ 'null' :[], 'a' :[1], 'b' :[2,7]},
-  #          2 :{ 'null' :[], 'a' :[6], 'b' :[3]},
-  #          3 :{ 'null' :[], 'a' :[1], 'b' :[2]},
-  #          4 :{ 'null' :[], 'a' :[2], 'b' :[5]},
-  #          5 :{ 'null' :[], 'a' :[4], 'b' :[3,7]},
-  #          6 :{ 'null' :[], 'a' :[6], 'b' :[3,7]},
-  #          7 :{ 'null' :[], 'a' :[  ], 'b' :[]},
-  # }
-  # 0 1 2 3 4 5 6 7 8 9 10
-  # A B C D E F G H I J H
-  # return {'A':{'null':['B','I'],'a':[],'b':[]},
-  #         'B':{'null':['C','E'],'a':[],'b':[]},
-  #         'C':{'null':[],'a':['D'],'b':[]},
-  #         'D':{'null':[],'a':[],'b':['C']},
-  #         'E':{'null':[],'a':[],'b':['F']},
-  #         'F':{'null':[],'a':[],'b':['G']},
-  #         'G':{'null':['H'],'a':[],'b':[]},
-  #         'H':{'null':['B','I'],'a':['I'],'b':[]},
-  #         'I':{'null':[],'a':['J'],'b':['J']},
-  #         'J':{'null':[],'a':[],'b':['H']},
-  #         'H':{'null':[],'a':[],'b':[]}
-  # }
+  return {'0':{'null':['1','7'],'a':[],'b':[]},
+          '1':{'null':['2','4'],'a':[],'b':[]},
+          '2':{'null':[],'a':['3'],'b':[]},
+          '3':{'null':['6'],'a':[],'b':[]},
+          '4':{'null':[],'a':[],'b':['5']},
+          '5':{'null':['6'],'a':[],'b':[]},
+          '6':{'null':['1','7'],'a':[],'b':[]},
+          '7':{'null':[],'a':['8'],'b':[]},
+          '8':{'null':[],'a':[],'b':['9']},
+          '9':{'null':[],'a':[],'b':['10']},
+          '10':{'null':[],'a':[],'b':[]}
+  }
   # return {'S': {'null':[],'0':['V','Q'],'1':['Q','U']}, 'Q': {'null':[],'0':['V'],'1':['Q','U']}, 'V': {'null':[],'0':['Z'],'1':[]}, 
   # 'U': {'null':[],'0':[],'1':['Z']}, 'Z':{'null':[],'0':['Z'],'1':['Z']}}
 
@@ -82,67 +58,8 @@ def createNFAgraph():
   #       '4':{'null':[],'a':['0'],'b':['5']},
   #       '5':{'null':[],'a':['5'],'b':['4']},
   # }
-  # a 1 b 0
-  # return {0:{'null':[],'a':[1],'b':[]},
-  #       1:{'null':[2,6,12],'a':[],'b':[]},
-  #       2:{'null':[],'a':[3],'b':[]},
-  #       3:{'null':[],'a':[],'b':[4]},
-  #       4:{'null':[5],'a':[],'b':[]},
-  #       5:{'null':[12],'a':[],'b':[5]},
-  #       6:{'null':[],'a':[7],'b':[]},
-  #       7:{'null':[10],'a':[],'b':[8]},
-  #       8:{'null':[],'a':[9],'b':[]},
-  #       9:{'null':[],'a':[],'b':[10]},
-  #       10:{'null':[7],'a':[11],'b':[]},
-  #       11:{'null':[12],'a':[],'b':[]},
-  #       12:{'null':[],'a':[],'b':[13]},
-  #       13:{'null':[],'a':[],'b':[]},
-  # }
-  # return {'X':{'null':[],'a':[],'b':['A']},
-  #       'A':{'null':['B','F','L'],'a':[],'b':[]},
-  #       'B':{'null':[],'a':[],'b':['C']},
-  #       'C':{'null':[],'a':['D'],'b':[]},
-  #       'D':{'null':[],'a':[],'b':['E']},
-  #       'E':{'null':['L'],'a':['E'],'b':[]},
-  #       'F':{'null':[],'a':[],'b':['G']},
-  #       'G':{'null':['J'],'a':['H'],'b':[]},
-  #       'H':{'null':[],'a':[],'b':['I']},
-  #       'I':{'null':[],'a':['J'],'b':[]},
-  #       'J':{'null':['G'],'a':[],'b':['K']},
-  #       'K':{'null':['L'],'a':[],'b':[]},
-  #       'L':{'null':['A'],'a':['Y'],'b':[]},
-  #       'Y':{'null':[],'a':[],'b':[]},
-  # }
-  # 64 3t
-  # return{
-  #   0:{'null':[],'a':[1,2],'b':[2,3]},
-  #   1:{'null':[],'a':[4],'b':[]},
-  #   2:{'null':[],'a':[1],'b':[2,3]},
-  #   3:{'null':[],'a':[],'b':[4]},
-  #   4:{'null':[],'a':[4],'b':[4]},
-  # }
-  # 65 4t b
-  # return{
-  #   0:{'null':[],'a':[1],'b':[2]},
-  #   1:{'null':[],'a':[1],'b':[4]},
-  #   2:{'null':[],'a':[1],'b':[3]},
-  #   3:{'null':[],'a':[3],'b':[2]},
-  #   4:{'null':[],'a':[0],'b':[5]},
-  #   5:{'null':[],'a':[5],'b':[4]},
-  # }
-  # 65 7t 
-  # return{
-  #   0:{'null':[],'a':[1],'b':[6]},
-  #   1:{'null':[],'a':[1],'b':[2,7]},
-  #   2:{'null':[],'a':[6],'b':[3]},
-  #   3:{'null':[],'a':[1],'b':[2]},
-  #   4:{'null':[],'a':[2],'b':[5]},
-  #   5:{'null':[],'a':[4],'b':[3,7]},
-  #   6:{'null':[],'a':[6],'b':[3,7]},
-  #   7:{'null':[],'a':[],'b':[]},
-  # }
-NFA1 = NFAgraph(createNFAgraph(),gra.start,gra.end)
-# NFA1 = NFAgraph(createNFAgraph(),[0],[10])
+# NFA1 = NFAgraph(createNFAgraph(),gra.start,gra.end)
+NFA1 = NFAgraph(createNFAgraph(),['0'],['10'])
 graph = NFA1.NFA
 
 def getRoads(gra):
@@ -162,9 +79,8 @@ def getStartEnd():
 
 def closure(list):
   ans = []
-  hadFind = []
   for x in list:
-    findClosure(x,ans,hadFind)
+    findClosure(x,ans)
   return ans
 
 def notExist(x,ans):
@@ -173,29 +89,23 @@ def notExist(x,ans):
   else:
     return False
 
-def findClosure(x,ans,hadFind):
-  if notExist(x,hadFind):
-    if graph[x]['null'] == []:
-      appendNoRepeat(x,ans)
-      hadFind.append(x)
-    elif graph[x]['null'] != []  :
-      nextNodes = graph[x]['null']
-      appendNoRepeat(x,ans)
-      hadFind.append(x)
-      for node in nextNodes:
-        appendNoRepeat(node,ans)
-        findClosure(node,ans,hadFind)
+def findClosure(x,ans):
+  if graph[x]['null'] == []:
+    appendNoRepeat(x,ans)
+  else:
+    nextNodes = graph[x]['null']
+    appendNoRepeat(x,ans)
+    for node in nextNodes:
+      appendNoRepeat(node,ans)
+      findClosure(node,ans)
 
-def findClosureTerm(x,ans,hadFind):
-  if notExist(x,hadFind):
+def findClosureTerm(x,ans):
     if graph[x]['null'] == []:
       appendNoRepeat(x,ans)
-      hadFind.append(x)
     else:
       nodes = graph[x]['null']
-      hadFind.append(x)
       for node in nodes:
-        findClosureTerm(node,ans,hadFind)
+        findClosureTerm(node,ans)
       
 
 def move(list,road,gra = graph):
@@ -213,8 +123,7 @@ def getTerm(x,road,ans,gra = graph):
   elif 'null' in gra[x]:
     if gra[x]['null'] != []:
       terms = []
-      hadFind = []
-      findClosureTerm(x,terms,hadFind)
+      findClosureTerm(x,terms)
       for term in terms:
         termRoads = gra[term][road]
         for termRoad in termRoads:
@@ -242,13 +151,9 @@ def strsort(alist):
   if alist == []:
     return []
 
-  if isinstance(alist[0],str):
-    if alist[0].isdigit():  
-      alist.sort(key=sort_key)
-      return alist
-    else:
-      temp = sorted(alist)
-      return temp
+  if alist[0].isdigit():  
+    alist.sort(key=sort_key)
+    return alist
   else:
     temp = sorted(alist)
     return temp
@@ -295,15 +200,12 @@ def getFirstNode():
 
 def indexLabel(index):
   start = NFA1.start[0]
-  if isinstance(start,int):
-    return str(index)
-  else:  
-    if start.isdigit():
-      numList = list(map(chr, range(ord('0'), ord('9') + 1)))
-      return numList[index]
-    elif start.isalpha():
-      letterList = list(map(chr, range(ord('A'), ord('Z') + 1)))
-      return letterList[index]
+  if start.isdigit():
+    numList = list(map(chr, range(ord('0'), ord('9') + 1)))
+    return numList[index]
+  elif start.isalpha():
+    letterList = list(map(chr, range(ord('A'), ord('Z') + 1)))
+    return letterList[index]
 
 def newTerm(ends,list):
   for end in ends:
@@ -414,7 +316,6 @@ def minDFA(DFA):
   for x in DFAgraph:
     if notExist(x,group1):
       group2.append(x)
-  print('g:',groups)
   while 1:
     oldgroups = groups.copy()
     for group in oldgroups:
@@ -438,7 +339,6 @@ def minDFA(DFA):
 
     if oldgroups == groups:
       return groups
-    print('g:',groups)
 
 
 def minIndex(list,graphList):
@@ -467,10 +367,8 @@ def drawMinDFA(min,DFA):
 
 if __name__ == '__main__':
 
-  # t0 = closure([0])
   t0 = closure(gra.start)
   ans = []
-  print(t0)
   BFS(t0,ans)
   print('DFA',ans)
   draw(ans,NFA1.end)

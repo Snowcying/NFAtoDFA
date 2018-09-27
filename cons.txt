@@ -87,7 +87,7 @@ def nextLetter(list,index):
 
 
 def parse(strlist):
-  # print('str',strlist)
+  print('str',strlist)
   ans = []
   strlist.append(' ')
   index = -1
@@ -98,10 +98,8 @@ def parse(strlist):
       nextLe = nextLetter(strlist,index)
       if (x.isalpha() and nextLe.isalpha()) or (x.isalpha() and nextLe == '(') :
         aim = aim + '$'
-      elif x == '*' and (nextLe.isalpha() or nextLe == '('):
+      elif x == '*' and (nextLe.isalpha() or nextLe == '|' or nextLe == '('):
         aim = aim + '1$'
-      elif x == '*' and (nextLe == '|' or nextLe == ')'):
-        aim = aim + '1'
       elif x == '*' and nextLe == ' ':
         aim = aim + '1'
       elif x == ')' and nextLe.isalpha():
@@ -119,7 +117,7 @@ def isOperator(op):
     return False
 
 def calculate(ex):
-  # print('start')
+  print('start')
   num = len(ex)
   i = 0
   while num > 1:
@@ -129,10 +127,8 @@ def calculate(ex):
       y = ex[i-1]
       res = construct(x,y,c)
       ex[i] = res
-      del ex[i-2]
-      del ex[i-2]
-      # ex.remove(x)
-      # ex.remove(y)
+      ex.remove(x)
+      ex.remove(y)
       i = 0
     else:
       i = i + 1
@@ -150,12 +146,12 @@ indexNum = 0
 
 def initDic():
   dic = {'null':[]}
-  letterList = list(map(chr, range(ord('a'), ord('d') + 1)))
-  # letterList = list(map(chr, range(ord('A'), ord('Q') + 1)))
+  letterList = list(map(chr, range(ord('a'), ord('b') + 1)))
+  letterList2 = list(map(chr, range(ord('A'), ord('Q') + 1)))
   for letter in letterList:
     dic[letter] = []
-  # for letter2 in letterList2:
-  #   dic[letter2] = []
+  for letter2 in letterList2:
+    dic[letter2] = []
   return dic 
 
 def construct(x,y,op):
@@ -166,23 +162,23 @@ def construct(x,y,op):
   if op == '$':
     # a$a
     if isinstance(x,str) and isinstance(y,str):
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
-      dic[(indexNum-2)][x].append((indexNum-1))
-      dic[(indexNum-1)][y].append((indexNum))
-      g1 = graph(dic,[(indexNum-2)],[(indexNum)])
+      dic[str(indexNum)] = initDic()
+      dic[str(indexNum-2)][x].append(str(indexNum-1))
+      dic[str(indexNum-1)][y].append(str(indexNum))
+      g1 = graph(dic,[str(indexNum-2)],[str(indexNum)])
       indexNum = indexNum + 1
     # obj$a
     elif (not isinstance(x,str)) and isinstance(y,str):
       dic = x.dic
       dicEnd = x.end
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       for end in dicEnd:
-        dic[end][y].append((indexNum))
-      g1 = graph(dic,x.start,[(indexNum)])
+        dic[end][y].append(str(indexNum))
+      g1 = graph(dic,x.start,[str(indexNum)])
       indexNum = indexNum + 1
     # obj$obj
     elif (not isinstance(x,str)) and (not isinstance(y,str)):
@@ -204,62 +200,58 @@ def construct(x,y,op):
     # a$obj
     else:
       dic = y.dic
-      dic[(indexNum)] = initDic()
-      dicyStart = y.start[0]
-      # for ystart in dicyStart:
-      dic[(indexNum)][x].append(dicyStart)
-      g1 = graph(dic,[(indexNum)],y.end)
+      dic[str(indexNum)] = initDic()
+      dicyStart = y.start
+      for ystart in dicyStart:
+        dic[str(indexNum)][x].append(ystart)
+      g1 = graph(dic,[str(indexNum)],y.end)
       indexNum = indexNum + 1
   elif op == '*':
     if isinstance(x,str):
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum-1)][x].append((indexNum-1))
-      g1 = graph(dic,[(indexNum-1)],[(indexNum-1)])
-      # dic[(indexNum)] = initDic()
-      # indexNum = indexNum + 1
-      # dic[(indexNum-1)]['null'].append((indexNum-2))
-      # dic[(indexNum-2)][x].append((indexNum-1))
-      # g1 = graph(dic,[(indexNum-2)],[(indexNum-1)])
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum-1)]['null'].append(str(indexNum-2))
+      dic[str(indexNum-2)][x].append(str(indexNum-1))
+      g1 = graph(dic,[str(indexNum-2)],[str(indexNum-1)])
     else:
       dic = x.dic
-      # dic[(indexNum)] = initDic()
-      # indexNum = indexNum + 1
-      # dic[(indexNum)] = initDic()
-      # indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
+      dic[str(indexNum)] = initDic()
+      indexNum = indexNum + 1
       dicStart = x.start[0]
       dicEnd = x.end[0]
       dic[dicEnd]['null'].append(dicStart)
-      # dic[(indexNum-2)]['null'].append(dicStart)
-      # dic[(indexNum-2)]['null'].append((indexNum-1))
-      # dic[dicEnd]['null'].append((indexNum-1))
-      dic[dicStart]['null'].append((dicEnd))
-      # g1 = graph(dic,[(indexNum-2)],[(indexNum-1)])
-      g1 = graph(dic,[dicStart],[dicEnd])
+      dic[str(indexNum-2)]['null'].append(dicStart)
+      dic[str(indexNum-2)]['null'].append(str(indexNum-1))
+      dic[dicEnd]['null'].append(str(indexNum-1))
+      g1 = graph(dic,[str(indexNum-2)],[str(indexNum-1)])
   elif op == '|':
     # a|a
     if isinstance(x,str) and isinstance(y,str):
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
 
-      dic[(indexNum-6)]['null'].append((indexNum-5))
-      dic[(indexNum-6)]['null'].append((indexNum-3))
-      dic[(indexNum-5)][x].append((indexNum-4))
-      dic[(indexNum-4)]['null'].append((indexNum-1))
-      dic[(indexNum-3)][y].append((indexNum-2))
-      dic[(indexNum-2)]['null'].append((indexNum-1))
+      dic[str(indexNum-6)]['null'].append(str(indexNum-5))
+      dic[str(indexNum-6)]['null'].append(str(indexNum-3))
+      dic[str(indexNum-5)][x].append(str(indexNum-4))
+      dic[str(indexNum-4)]['null'].append(str(indexNum-1))
+      dic[str(indexNum-3)][y].append(str(indexNum-2))
+      dic[str(indexNum-2)]['null'].append(str(indexNum-1))
 
-      g1 = graph(dic,[(indexNum-6)],[(indexNum-1)])
+      g1 = graph(dic,[str(indexNum-6)],[str(indexNum-1)])
       
     # obj|a
     elif (not isinstance(x,str)) and isinstance(y,str):
@@ -267,22 +259,22 @@ def construct(x,y,op):
       dicEnd = x.end[0]
       dicStart = x.start[0]
 
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
 
-      dic[(indexNum-4)]['null'].append(dicStart)
-      dic[(indexNum-4)]['null'].append((indexNum-3))
-      dic[(indexNum-3)][y].append((indexNum-2))
-      dic[(indexNum-2)]['null'].append((indexNum-1))
-      dic[dicEnd]['null'].append((indexNum-1))
+      dic[str(indexNum-4)]['null'].append(dicStart)
+      dic[str(indexNum-4)]['null'].append(str(indexNum-3))
+      dic[str(indexNum-3)][y].append(str(indexNum-2))
+      dic[str(indexNum-2)]['null'].append(str(indexNum-1))
+      dic[dicEnd]['null'].append(str(indexNum-1))
 
-      g1 = graph(dic,[(indexNum-4)],[(indexNum-1)])
+      g1 = graph(dic,[str(indexNum-4)],[str(indexNum-1)])
 
     # obj|obj
     elif (not isinstance(x,str)) and (not isinstance(y,str)):
@@ -294,9 +286,9 @@ def construct(x,y,op):
       dicyEnd = y.end[0]
 
       # dic = dicx
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
 
       for dicxx in dicx:
@@ -304,43 +296,42 @@ def construct(x,y,op):
       for dicyy in dicy:
         dic[dicyy] = dicy[dicyy]
       
-      dic[(indexNum-2)]['null'].append(dicxStart)
-      dic[(indexNum-2)]['null'].append(dicyStart)
-      dic[dicxEnd]['null'].append((indexNum-1))
-      dic[dicyEnd]['null'].append((indexNum-1))
+      dic[str(indexNum-2)]['null'].append(dicxStart)
+      dic[str(indexNum-2)]['null'].append(dicyStart)
+      dic[dicxEnd]['null'].append(str(indexNum-1))
+      dic[dicyEnd]['null'].append(str(indexNum-1))
 
-      g1 = graph(dic,[(indexNum-2)],[(indexNum-1)])
+      g1 = graph(dic,[str(indexNum-2)],[str(indexNum-1)])
     # a|obj
     else:
       dic = y.dic
       dicEnd = y.end[0]
       dicStart = y.start[0]
 
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
-      dic[(indexNum)] = initDic()
+      dic[str(indexNum)] = initDic()
       indexNum = indexNum + 1
 
-      dic[(indexNum-4)]['null'].append(dicStart)
-      dic[(indexNum-4)]['null'].append((indexNum-3))
-      dic[(indexNum-3)][x].append((indexNum-2))
-      dic[(indexNum-2)]['null'].append((indexNum-1))
-      dic[dicEnd]['null'].append((indexNum-1))
+      dic[str(indexNum-4)]['null'].append(dicStart)
+      dic[str(indexNum-4)]['null'].append(str(indexNum-3))
+      dic[str(indexNum-3)][x].append(str(indexNum-2))
+      dic[str(indexNum-2)]['null'].append(str(indexNum-1))
+      dic[dicEnd]['null'].append(str(indexNum-1))
 
-      g1 = graph(dic,[(indexNum-4)],[(indexNum-1)])
+      g1 = graph(dic,[str(indexNum-4)],[str(indexNum-1)])
 
-  # print('dic',dic)
-  # print('start',g1.start,'end',g1.end)
+  print('dic',dic)
+  print('start',g1.start,'end',g1.end)
 
   return g1
 
 if __name__ == '__main__':
-  express = 'a*bb'
+  express = 'aA|bQ'
   ans = expression(express)
   print(ans)
   dic = calculate(ans)
-  print(dic.dic,dic.start,dic.end)
